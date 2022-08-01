@@ -7,7 +7,7 @@ var bcrypt = require('bcrypt');
 var userModel = require('../models/users')
 
 
-router.post('/sign-up', async function(req,res,next){
+router.post('/signUp', async function(req,res,next){
 
   var error = []
   var result = false
@@ -53,7 +53,7 @@ router.post('/sign-up', async function(req,res,next){
   res.json({result, saveUser, error, token})
 })
 
-router.post('/sign-in', async function(req,res,next){
+router.post('/signIn', async function(req,res,next){
 
   var result = false
   var user = null

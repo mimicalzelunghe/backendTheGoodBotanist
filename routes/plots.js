@@ -1,5 +1,9 @@
+import plantsData from './plantsDB.json'
+
 var express = require('express');
 var router = express.Router();
+
+var ecologicalScoring = require('./ecologicalScoring.js')
 
 /* =================================================
 Uploads all the plots of a specific garden based on a plotId
@@ -48,5 +52,7 @@ router.put('/modifyPlotData', function(req, res, next) {
     res.json(modifiedPlot);
 
 });
+
+
 
 module.exports = router;

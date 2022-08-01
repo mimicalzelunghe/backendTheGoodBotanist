@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
+var ecologicalScoring = require('./ecologicalScoring.js')
 /* =================================================
 Uploads the first plant having the given scientific name
-input: scientifc name
+input: scientifc name - route 9
 ================================================= */
 
 router.get('/uploadPlant', function(req, res, next) {
@@ -15,7 +16,18 @@ router.get('/uploadPlant', function(req, res, next) {
 
 /* =================================================
 Uploads all the plants object from a list of plantId given in 
-input
+input - route 11
+================================================= */
+
+router.get('/uploadPlantsFromId', function(req, res, next) {
+    var plants = []
+
+    res.json(plants);
+});
+
+/* =================================================
+Uploads a plant objet from a plant id 
+input - route 4
 ================================================= */
 
 router.get('/uploadPlants', function(req, res, next) {
@@ -23,7 +35,6 @@ router.get('/uploadPlants', function(req, res, next) {
 
     res.json(plants);
 });
-
 
 /* =================================================
 - Uploads all the known plants 
@@ -33,7 +44,19 @@ the plot specifications
 
 input: plotId
 ================================================= */
-router.get('/uploadSuggestions', function(req, res, next) {
+router.get('/uploadSuggestedPlants', function(req, res, next) {
+    var plants = []
+
+    res.json(plants);
+});
+
+
+/* =================================================
+- Uploads all the known plants for a given plot
+input: plotId 
+output: arary of plant object - route 12
+================================================= */
+router.get('/uploadPlotPlants', function(req, res, next) {
     var plants = []
 
     res.json(plants);
