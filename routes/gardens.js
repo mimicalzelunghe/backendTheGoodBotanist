@@ -16,12 +16,20 @@ router.get('/uploadUserGardens', function(req, res, next) {
     Creates a new garden for the user
 ================================================= */
 router.post('/createGarden', function(req, res, next) {
-    var availablePlotDimension = [];
-    var availableSunshineIntensity = [];
-    var availableSoilTypes = [];
-    var availableClimates = [];
+    // var availablePlotDimension = [];
+    // var availableSunshineIntensity = [];
+    // var availableSoilTypes = [];
+    // var availableClimates = [];
 
-    res.json(availablePlotDimension, availableSunshineIntensity, availableSoilTypes, availableClimates);
+    // res.json(availablePlotDimension, availableSunshineIntensity, availableSoilTypes, availableClimates);
+
+    var newUser = new UserModel ({
+        lastname: "Doe",
+        firstname: "Maria",
+        email:  "maria.doe@gmail.com"
+        });
+        
+        var userSaved = await newUser.save();
 
 });
 
