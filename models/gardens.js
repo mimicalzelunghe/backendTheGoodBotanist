@@ -3,10 +3,11 @@ var mongoose = require('mongoose');
 var gardensSchema = mongoose.Schema({
     id: Number,
     garden_name: String,
-    FK_climate: Number,
-    /* [FK_plot: Array] */
+    gardenClimate: { type: mongoose.Schema.Types.ObjectId, ref: 'climate' },
+    gardenPlots: [{ type: mongoose.Schema.Types.ObjectId, ref: 'plots' }],
+
 });
 
-var gardensModel = mongoose.model('gardens', gardensSchema);
+var GardenModel = mongoose.model('gardens', gardensSchema);
 
-module.exports = gardensModel;
+module.exports = GardenModel;

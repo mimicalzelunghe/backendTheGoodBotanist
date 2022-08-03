@@ -3,11 +3,13 @@ var mongoose = require('mongoose');
 var plotsSchema = mongoose.Schema({
     /* ID */
     name: String,
-    size: Number,
+    size: String,
     sunshine: String,
     scoring: Number,
-    user_token: String,
-    soil: String
+    soil: String,
+    groundedPlants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'plants' }],
+    favoritePlants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'plants' }],
+
     /* grounded_plants= [FK_plante]: Array*/
     /* favorite_plants= [FK_plante]: Array*/
 });

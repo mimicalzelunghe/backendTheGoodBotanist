@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var climateSchema = mongoose.Schema({
     /* ID */
-    climate_type: String, /* "continental", "mediterraneen", "montagneux", "tropical", "atlantique"  */
+    climate_type: String, /* "continental", "mediterraneen", "montagne", "tropical", "atlantique"  */
     max_temp: Number, /* (°C) */
     min_temp: Number, /* (°C) */
     months_drought: Number, /* 0.5, 1, 4.5 */
@@ -10,6 +10,6 @@ var climateSchema = mongoose.Schema({
 
 });
 
-var climateModel = mongoose.model('gardens', climateSchema);
+var climateModel = mongoose.model('climate', climateSchema);
 
 module.exports = climateModel;
