@@ -12,6 +12,8 @@ var plotsRouter = require('./routes/plots');
 
 
 require('./models/connection')
+var gardensRouter = require('./routes/gardens');
+require('./models/connection')
 
 var app = express();
 

@@ -36,6 +36,7 @@ router.post('/signUp', async function(req,res,next){
     var newUser = new userModel({
       username: req.body.usernameFromFront,
       email: req.body.emailFromFront,
+      gardensId:[],
       password: hash,
       token: uid2(32),
     })
@@ -59,7 +60,7 @@ router.post('/signIn', async function(req,res,next){
   var user = null
   var error = []
   var token = null
-  var gardensIds = []
+  var userGardens = []
 
   console.log("Mimic3: route users/signIn - valeur de mon req.body", req.body)
   
@@ -76,12 +77,16 @@ router.post('/signIn', async function(req,res,next){
     })
 
     console.log("Mimic5: route users/signIn - user trouvé?", user)
-    gardensIds = user.gardensIds
-    
-    console.log("Mimic6: route users/signIn - user's garden?", gardensIds)
+  
+    console.log("Mimic6: route users/signIn - user's garden?", userGardens)
     
     
     if(user){
+      // récupérer la liste des id de jardins
+      userGardens = user.gardensId
+      console.log("Mimic9: route users/signIn - user's garden?", userGardens)
+
+      //vérifier que le password est le bon avec bcrypt
       if(bcrypt.compareSync(req.body.passwordFromFront, user.password)){
         result = true
         token = user.token
@@ -90,13 +95,13 @@ router.post('/signIn', async function(req,res,next){
         error.push('mot de passe incorrect')
       }
       
-    } else {
+    } else {//user n'existe pas
       error.push('email incorrect')
     }
   }
   
 
-  res.json({result, token, gardensIds, error})
+  res.json({result, token, userGardens, error})
 
 
 })
