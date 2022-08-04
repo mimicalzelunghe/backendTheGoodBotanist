@@ -1,5 +1,3 @@
-import plantsData from './plantsDB.json'
-
 var express = require('express');
 var router = express.Router();
 

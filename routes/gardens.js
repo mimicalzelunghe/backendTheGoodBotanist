@@ -51,32 +51,18 @@ router.post('/createGarden', async function (req, res, next) {
         console.log("🚀 ~ file: gardens.js ~ line 54 ~ req.body.token", req.body.token)
 
     
-        var tempUser = await UserModel.find( { token: req.body.token  } );
+        var tempUser = await UserModel.findOne( { token: req.body.token  } );
+        console.log("🚀 ~ file: gardens.js ~ line 55 ~ tempUser", tempUser)
         
-        console.log("🚀 ~ file: gardens.js ~ line 51 ~ tempUser", tempUser);
+        tempUser.gardensId.push(gardenSaved._id)
 
-        var userId = tempUser[0].id;
-        console.log("🚀 ~ file: gardens.js ~ line 56 ~ userId", userId)
-        
-        var gardensIdList = tempUser[0].gardensId;
-        console.log("🚀 ~ file: gardens.js ~ line 62 ~ gardensIdList", gardensIdList)
-        console.log("🚀 ~ file: gardens.js ~ line 63 ~ tempUser[0].gardensId", tempUser[0].gardensId)
-        
-        gardensIdList.push(tempUser[0].gardensId)
-        console.log("🚀 ~ file: gardens.js ~ line 62 ~ gardensIdList", gardensIdList)
+        console.log("gardenSaved.gardenName",gardenSaved.gardenName);
 
-        
-
-        gardensIdList.push(IdClimate)
-
-        await UserModel.updateOne(
-            { id: userId},
-            { gardensId: gardensIdList }
-         );
+        await tempUser.save()
 
 
 
-    res.json(true)
+    res.json({GardenNameJustCreated : gardenSaved.gardenName })
 
         // http://192.168.10.114:3000/gardens/createGarden test postman
 
