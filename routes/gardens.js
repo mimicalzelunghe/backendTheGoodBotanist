@@ -5,6 +5,8 @@ var router = express.Router();
 
 
 var GardenModel = require('../models/gardens')
+var UserModel = require('../models/user')
+
 
 
 /* =================================================
@@ -12,10 +14,14 @@ Uploads all the gardens in the DB for this pseudo or user.
     This route returns an object garden
 ================================================= */
 
-router.get('/uploadUserGardens', function(req, res, next) {
-    var gardens = []
+router.post('/uploadUserGardens', function(req, res, next) {
 
-    res.json(gardens);
+    // var users = await UserModel.find();
+
+
+    // var gardens = []
+
+    res.json(true);
 });
 
 /* =================================================
@@ -24,30 +30,31 @@ router.get('/uploadUserGardens', function(req, res, next) {
 router.post('/createGarden', async function (req, res, next) {
 
 
-         console.log("Hello");
+        console.log("req.body.climateSelected ",req.body);
 
 
-         var IdClimate = await climateModel.find( { climate_type: req.body.climateTypeFromFront } );
-         console.log("🚀 ~ file: gardens.js ~ line 34 ~ IdClimate", IdClimate);
-         console.log("IdClimate.id",IdClimate[0]._id);
-         
-
+         var Climate = await climateModel.find( { climate_type: req.body.gardenClimate } );
+         var IdClimate = Climate[0].id
+         console.log("IdClimate", Climate[0].id);
+        
+         //enregistrement du jardin dans la base de donnée
         var gardenSaved;
         var newGarden  = await new GardenModel ({
-        garden_name: req.body.gardenNameFromFront,
-        gardenClimate: IdClimate[0]._id,
+        garden_name: req.body.gardenName,
+        gardenClimate: IdClimate,
         gardenPlots: [],
         });
         
         gardenSaved = await newGarden.save();
 
     
-        console.log("gardenSaved", gardenSaved)
+        var user = await UserModel.find( { token: req.body.token  } );
+        console.log("🚀 ~ file: gardens.js ~ line 51 ~ user", user)
 
-        var user = await UserModel.find( { token: req.body.tokenUserFromFront  } );
 
+        
         await UserModel.updateOne(
-            { lastname: "doe"},
+            { token: token},
             { email: "john@doe.fr" }
          );
 
