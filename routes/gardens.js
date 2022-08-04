@@ -46,7 +46,6 @@ router.post('/createGarden', async function (req, res, next) {
 
         var user = await UserModel.find( { token: req.body.tokenUserFromFront  } );
 
-
         await UserModel.updateOne(
             { lastname: "doe"},
             { email: "john@doe.fr" }
