@@ -16,12 +16,10 @@ router.get('/uploadUserGardens', function(req, res, next) {
     Creates a new garden for the user
 ================================================= */
 router.post('/createGarden', function(req, res, next) {
-    var availablePlotDimension = [];
-    var availableSunshineIntensity = [];
-    var availableSoilTypes = [];
-    var availableClimates = [];
-
-    res.json(availablePlotDimension, availableSunshineIntensity, availableSoilTypes, availableClimates);
+    var result=''
+    console.log("Mimic1: route garden.js - createGarden - valeur de gardenName :", req.body.gardenName)
+    console.log("Mimic2: route garden.js - createGarden - valeur de gardenClimate :", req.body.gardenClimate)
+    res.json(result);
 
 });
 

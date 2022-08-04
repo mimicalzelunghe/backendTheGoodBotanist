@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
-    articlesId: [
+    gardensId: [
         {type: mongoose.Schema.Types.ObjectId, ref:'gardens'}
     ],
     username: String,

@@ -11,7 +11,7 @@ router.post('/signUp', async function(req,res,next){
 
   var error = []
   var result = false
-  var saveUser = null
+  var savedUser = null
   var token = null
 
   const data = await userModel.findOne({
@@ -40,17 +40,17 @@ router.post('/signUp', async function(req,res,next){
       token: uid2(32),
     })
   
-    saveUser = await newUser.save()
+    savedUser = await newUser.save()
   
     
-    if(saveUser){
+    if(savedUser){
       result = true
-      token = saveUser.token
+      token = savedUser.token
     }
   }
   
 
-  res.json({result, saveUser, error, token})
+  res.json({result, token, error})
 })
 
 router.post('/signIn', async function(req,res,next){
@@ -59,6 +59,9 @@ router.post('/signIn', async function(req,res,next){
   var user = null
   var error = []
   var token = null
+  var gardensIds = []
+
+  console.log("Mimic3: route users/signIn - valeur de mon req.body", req.body)
   
   if(req.body.emailFromFront == ''
   || req.body.passwordFromFront == ''
@@ -67,10 +70,16 @@ router.post('/signIn', async function(req,res,next){
   }
 
   if(error.length == 0){
+
     user = await userModel.findOne({
       email: req.body.emailFromFront,
     })
-  
+
+    console.log("Mimic5: route users/signIn - user trouvé?", user)
+    gardensIds = user.gardensIds
+    
+    console.log("Mimic6: route users/signIn - user's garden?", gardensIds)
+    
     
     if(user){
       if(bcrypt.compareSync(req.body.passwordFromFront, user.password)){
@@ -87,7 +96,7 @@ router.post('/signIn', async function(req,res,next){
   }
   
 
-  res.json({result, user, error, token})
+  res.json({result, token, gardensIds, error})
 
 
 })
