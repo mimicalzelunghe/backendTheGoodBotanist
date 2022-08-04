@@ -5,7 +5,7 @@ var router = express.Router();
 
 
 var GardenModel = require('../models/gardens')
-var UserModel = require('../models/user')
+var UserModel = require('../models/users')
 
 
 
@@ -15,6 +15,7 @@ Uploads all the gardens in the DB for this pseudo or user.
 ================================================= */
 
 router.post('/uploadUserGardens', function(req, res, next) {
+
 
     // var users = await UserModel.find();
 
@@ -47,15 +48,30 @@ router.post('/createGarden', async function (req, res, next) {
         
         gardenSaved = await newGarden.save();
 
-    
-        var user = await UserModel.find( { token: req.body.token  } );
-        console.log("🚀 ~ file: gardens.js ~ line 51 ~ user", user)
+        console.log("🚀 ~ file: gardens.js ~ line 54 ~ req.body.token", req.body.token)
 
+    
+        var tempUser = await UserModel.find( { token: req.body.token  } );
+        
+        console.log("🚀 ~ file: gardens.js ~ line 51 ~ tempUser", tempUser);
+
+        var userId = tempUser[0].id;
+        console.log("🚀 ~ file: gardens.js ~ line 56 ~ userId", userId)
+        
+        var gardensIdList = tempUser[0].gardensId;
+        console.log("🚀 ~ file: gardens.js ~ line 62 ~ gardensIdList", gardensIdList)
+        console.log("🚀 ~ file: gardens.js ~ line 63 ~ tempUser[0].gardensId", tempUser[0].gardensId)
+        
+        gardensIdList.push(tempUser[0].gardensId)
+        console.log("🚀 ~ file: gardens.js ~ line 62 ~ gardensIdList", gardensIdList)
 
         
+
+        gardensIdList.push(IdClimate)
+
         await UserModel.updateOne(
-            { token: token},
-            { email: "john@doe.fr" }
+            { id: userId},
+            { gardensId: gardensIdList }
          );
 
 
