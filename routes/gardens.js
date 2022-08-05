@@ -8,7 +8,6 @@ var GardenModel = require('../models/gardens')
 var UserModel = require('../models/users')
 
 
-
 /* =================================================
 Uploads all the gardens in the DB for the incoming user. 
 This route returns an object garden
@@ -22,47 +21,31 @@ output:
 
 router.post('/uploadUserGardens', async function(req, res, next) {
 
+
     //find the user's garden. Gardens id are stored into 
     // the user's collection as an array
-    console.log("Mimic4: routes gardens/uploadGarden, req.body: ", req.body)
-    var user = await UserModel.findOne( { token: req.body.token  } );
+    var user = await UserModel.findOne( { token: req.body.token  } ).populate('gardensId');
+    console.log("🚀 ~ file: gardens.js ~ line 28 ~ router.post ~ user", user)
 
-    console.log("Mimic1: routes gardens/uploadUserGarden, user found? ", user)
+    // get all the gardens
+    var userGardens = user.gardensId
+    console.log("🚀 ~ file: gardens.js ~ line 33 ~ router.post ~ userGardens", userGardens)
 
-    const userGardensId = user.gardensId
-
-    //find the gardens
-    var gardens
-    var userGardensIds = user.gardensId
-    var listUserGardens = []
-
-    var findGarden = async (gardenId) =>{
-        var gardenData = await GardenModel.findOne({_id: gardenId})
-        console.log("🚀 ~ file: gardens.js ~ line 41 ~ findGarden ~ gardenData", gardenData)
-
-        listUserGardens = [...listUserGardens, gardenData]
-        console.log("🚀 ~ file: gardens.js ~ line 44 ~ findGarden ~ listUserGardens", listUserGardens)
-        
+    // if idGarden is not empty, we should put it on the top of the list
+    var first = req.body.idGarden;
+    console.log("🚀 ~ file: gardens.js ~ line 35 ~ router.post ~ first", first)
+    
+    if (first != ""){
+        // retrouver l'idGarden
+        userGardens.sort(function(x,y){return x._id ==first? -1 : y == first ? 1 : 0})
 
     }
-    userGardensIds.map( (currentGardenId) => {
-        //find the garden data
-        findGarden(currentGardenId)
-    })
-
-    /*userGardensIds.map( async (currentGardenId) => {
-        //find the garden data
-        var gardenData = await GardenModel.findOne({_id: gardenId})
-        console.log("🚀 ~ file: gardens.js ~ line 41 ~ findGarden ~ gardenData", gardenData)
-
-        listUserGardens = [...listUserGardens, gardenData]
-        console.log("🚀 ~ file: gardens.js ~ line 44 ~ findGarden ~ listUserGardens", listUserGardens)
-        
-    })*/
+    //data.sort(function(x,y){ return x == first ? -1 : y == first ? 1 : 0; });
+    console.log("🚀 ~ file: gardens.js ~ line 44 ~ router.post ~ userGardens", userGardens)    
     
-    console.log("🚀 ~ file: gardens.js ~ line 53 ~ router.post ~ listUserGardens", listUserGardens)
+
     
-    res.json(listUserGardens);
+    res.json(userGardens);
     
     
 });
