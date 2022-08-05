@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var PlantModel = require('../models/plants')
+
+
 var ecologicalScoring = require('./ecologicalScoring.js')
 /* =================================================
 Uploads the first plant having the given scientific name
@@ -30,9 +33,11 @@ Uploads a plant objet from a plant id
 input - route 4
 ================================================= */
 
-router.get('/uploadPlants', function(req, res, next) {
-    var plants = []
-
+router.get('/uploadPlants', async function (req, res, next) {
+    console.log("Coucou")
+    var plants = await PlantModel.find();
+    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants)
+    
     res.json(plants);
 });
 
@@ -45,7 +50,6 @@ the plot specifications
 input: plotId
 ================================================= */
 router.get('/uploadSuggestedPlants', function(req, res, next) {
-    var plants = []
 
     res.json(plants);
 });
@@ -80,13 +84,16 @@ router.get('/recognizePlant', function(req, res, next) {
 /* =================================================
     Creates a new garden for the user
 ================================================= */
-router.put('/addPlant', function(req, res, next) {
-    var availablePlotDimension = [];
-    var availableSunshineIntensity = [];
-    var availableSoilTypes = [];
-    var availableClimates = [];
+router.post('/addPlant', function(req, res, next) {
+    console.log("plantId Hello", req.body.plantId);
 
-    res.json(availablePlotDimension, availableSunshineIntensity, availableSoilTypes, availableClimates);
+    user = await UserModel.findOne( { token: req.body.token } );
+
+
+
+    res.json(true);
+
+    // res.json(availablePlotDimension, availableSunshineIntensity, availableSoilTypes, availableClimates);
 
 });
 
