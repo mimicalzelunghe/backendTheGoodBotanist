@@ -84,7 +84,7 @@ router.get('/recognizePlant', function(req, res, next) {
 /* =================================================
     Creates a new garden for the user
 ================================================= */
-router.post('/addPlant', function(req, res, next) {
+router.post('/addPlant', async function(req, res, next) {
     console.log("plantId Hello", req.body.plantId);
 
     user = await UserModel.findOne( { token: req.body.token } );
