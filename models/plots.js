@@ -1,11 +1,20 @@
 var mongoose = require('mongoose');
 
-var plotsSchema = mongoose.Schema({
+var plotSchema = mongoose.Schema({
     /* ID */
+    id:Number,
     name: String,
     size: String,
     sunshine: String,
-    scoring: Number,
+    scoring: [{
+        biodiversityAttractiveness:0,
+        sunshine: 0,
+        soilAdequation: 0,
+        resistanceToDrought: 0,
+        coldHardiness: 0,
+        climateAdequation: 0
+        }],
+        
     soil: String,
     groundedPlants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'plants' }],
     favoritePlants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'plants' }],
@@ -14,6 +23,6 @@ var plotsSchema = mongoose.Schema({
     /* favorite_plants= [FK_plante]: Array*/
 });
 
-var plotsModel = mongoose.model('plots', plotsSchema);
+var PlotModel = mongoose.model('plots', plotSchema);
 
-module.exports = plotsModel;
+module.exports = PlotModel;

@@ -1,5 +1,5 @@
 var express = require('express');
-const climateModel = require('../models/climate');
+const ClimateModel = require('../models/climates');
 const { findOne } = require('../models/gardens');
 var router = express.Router();
 
@@ -42,7 +42,6 @@ router.post('/uploadUserGardens', async function(req, res, next) {
     }
     //data.sort(function(x,y){ return x == first ? -1 : y == first ? 1 : 0; });
     console.log("🚀 ~ file: gardens.js ~ line 44 ~ router.post ~ userGardens", userGardens)    
-    
 
     
     res.json(userGardens);
@@ -59,7 +58,7 @@ router.post('/createGarden', async function (req, res, next) {
         console.log("req.body ",req.body);
 
 
-         var Climate = await climateModel.find( { climate_type: req.body.gardenClimate } );
+         var Climate = await ClimateModel.find( { climate_type: req.body.gardenClimate } );
          var IdClimate = Climate[0].id
          console.log("IdClimate", Climate[0].id);
         
