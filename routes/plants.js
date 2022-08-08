@@ -14,7 +14,6 @@ Uploads the first plant given the scientific name
 input: scientifc name - route 9
 output: plant object
 ================================================= */
-
 router.get('/uploadPlant', async function(req, res, next) {
     console.log("🚀 ~ file: plants.js ~ line 17 ~ router.get ~ req.body.plantScientificName", req.body.plantScientificName)
     
@@ -56,11 +55,10 @@ console.log("🚀 ~ file: plants.js ~ line 27 ~ router.post ~ req.body.plantsIds
 Uploads all the plants objet from a plant id 
 input - route 4
 ================================================= */
-
 router.get('/uploadPlants', async function (req, res, next) {
     console.log("Coucou")
     var plants = await PlantModel.find();
-    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants[0, 3])
+    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants.slice(0, 3))
     
     res.json(plants);
 });
@@ -144,7 +142,7 @@ router.post('/addPlant', async function(req, res, next) {
 
 
     // à ajouter dés que le plotId sera disponible depuis le store
-    const plotData = await plotsModel.findOne( { plotId: req.body.plotId } );
+    const plotData = await PlotsModel.findOne( { plotId: req.body.plotId } );
 
 
     // recup liste des id de plantes déjà existante
