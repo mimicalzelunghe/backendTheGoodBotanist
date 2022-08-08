@@ -1,7 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-var PlantModel = require('../models/plants')
+var PlantModel = require('../models/plants');
+var UserModel = require('../models/users');
+var plantModel = require('../models/plants');
+var plotsModel = require('../models/plots');
+
+
+
 
 
 var ecologicalScoring = require('./ecologicalScoring.js')
@@ -85,22 +91,64 @@ router.get('/recognizePlant', function(req, res, next) {
     Creates a new garden for the user
 ================================================= */
 router.post('/addPlant', async function(req, res, next) {
-    console.log("plantId Hello", req.body.plantId);
+    console.log("plotId Hello", req.body.plotId);
 
-    user = await UserModel.findOne( { token: req.body.token } );
+
+    // à ajouter dés que le plotId sera disponible depuis le store
+    const plotData = await plotsModel.findOne( { plotId: req.body.plotId } );
+
+
+    // recup liste des id de plantes déjà existante
+        // à laquelle on ajoute à cette liste le nouveau jardin
+        var plotUpdatedPlants = [...plot.groundedPlants, req.body.plantId]
+
+    // sauvegarder la nouvelle plante dans le parcelle
+    var updatedUser = await UserModel.updateOne(
+        {token:req.body.plot},
+        {groundedPlants: userUpdatedGardens }
+    )
+
+    res.json(true);
+
+
+});
+
+/* =================================================
+removes a plant from plot
+================================================= */
+router.post('/deletePlant',async function(req, res, next) {
+
+    console.log("plotId Hello", req.body.plotId);
+
+
+    // à ajouter dés que le plotId sera disponible depuis le store
+    const plotData = await plotsModel.findOne( { plotId: req.body.plotId } );
+    const plantPlot = plotData.groundedPlants;
+
+
+    // recup liste des id de plantes déjà existante
+        // à laquelle on ajoute à cette liste le nouveau jardin
+        var plotUpdatedPlants = plantPlot.splice(req.body.plantId, 1)
+
+    // sauvegarder la nouvelle plante dans le parcelle
+    var updatedUser = await UserModel.updateOne(
+        {token:req.body.plot},
+        {groundedPlants: userUpdatedGardens }
+    )
 
 
 
     res.json(true);
 
-    // res.json(availablePlotDimension, availableSunshineIntensity, availableSoilTypes, availableClimates);
-
 });
 
-/* =================================================
-removes a garden from the user's portfolio 
-================================================= */
-router.delete('/removePlantFromWishlist', function(req, res, next) {
+
+router.delete('/removePlantFromWishlist',async function(req, res, next) {
+
+    
+
+
+
     res.json(result);
 
 });
