@@ -10,6 +10,6 @@ var climateSchema = mongoose.Schema({
 
 });
 
-var climateModel = mongoose.model('climate', climateSchema);
+var ClimateModel = mongoose.model('climate', climateSchema);
 
-module.exports = climateModel;
+module.exports = ClimateModel;

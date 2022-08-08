@@ -2,41 +2,65 @@ var express = require('express');
 var router = express.Router();
 
 var PlantModel = require('../models/plants')
+var PlotsModel = require('../models/plots')
 
+var GardenModel = require('../models/gardens')
+var ClimateModel = require('../models/climates')
 
-var ecologicalScoring = require('./ecologicalScoring.js')
+var eS = require('./ecologicalScoring.js')
+
 /* =================================================
-Uploads the first plant having the given scientific name
+Uploads the first plant given the scientific name
 input: scientifc name - route 9
+output: plant object
 ================================================= */
 
-router.get('/uploadPlant', function(req, res, next) {
-    var plant = {}
-
+router.get('/uploadPlant', async function(req, res, next) {
+    console.log("🚀 ~ file: plants.js ~ line 17 ~ router.get ~ req.body.plantScientificName", req.body.plantScientificName)
+    
+    var plant = await UserModel.findOne( { token: req.body.plantScientificName } );
+    
+    console.log("🚀 ~ file: plants.js ~ line 17 ~ router.get ~ plant", plant)
+    
     res.json(plant);
 });
 
 
 /* =================================================
 Uploads all the plants object from a list of plantId given in 
-input - route 11
+input: array of ids
+output: array of objects of plants
 ================================================= */
 
-router.get('/uploadPlantsFromId', function(req, res, next) {
-    var plants = []
+router.post('/uploadPlantsFromIds', async function(req, res, next) {
+
+console.log("🚀 ~ file: plants.js ~ line 27 ~ router.post ~ req.body.plantsIds", req.body.plantsIds)
+    
+   var plantsIds = req.body.plantsIds
+   console.log("🚀 ~ file: plants.js ~ line 31 ~ router.post ~ plantsIds", plantsIds)
+
+   var plants = []
+   
+   plantsIds.map(async (currentPlantId)=>{
+        console.log("🚀 ~ file: plants.js ~ line 37 ~ router.post ~ plantsIds.map - I'm there")
+        var plant = await PlantModel.findById(currentPlantId)
+        plants.push(plant)
+
+   })
+   console.log("🚀 ~ file: plants.js ~ line 31 ~ router.post ~ plants", plants)
 
     res.json(plants);
 });
 
 /* =================================================
-Uploads a plant objet from a plant id 
+Uploads all the plants objet from a plant id 
 input - route 4
 ================================================= */
 
 router.get('/uploadPlants', async function (req, res, next) {
     console.log("Coucou")
     var plants = await PlantModel.find();
-    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants)
+    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants[0, 3])
     
     res.json(plants);
 });
@@ -49,8 +73,39 @@ the plot specifications
 
 input: plotId
 ================================================= */
-router.get('/uploadSuggestedPlants', function(req, res, next) {
+router.get('/uploadSuggestedPlants', async function(req, res, next) {
 
+    console.log("🚀 ~ file: plants.js ~ line 77 ~ router.get ~ req.body", req.body)
+
+    var plotId = req.body.plotId
+    var gardenId = req.body.gardenId
+
+    //load the plot features
+    var plot = await PlotsModel.findById(req.body.plotId)
+
+    //load the garden features
+    var garden = await GardenModel.findOne(req.body.gardenId)    
+
+    //load the plot climate
+    var climate = await ClimateModel.findOne(garden.gardenClimate)
+
+    //load al the DB plants 
+    var plants = await PlantModel.find()
+    // calculate the ecological scoring of each plant 
+    plants.map((plant)=>{
+        var plantScore = eS.plantEcoogicalScoring(plant, plot, climate)
+        // add the ecological scoring as a new property of plant
+        plant["score"] = plantScore
+        console.log("🚀 ~ file: plants.js ~ line 99 ~ plants.map ~ plantScore", plantScore)
+        
+    })
+
+    //sort plants descending by ecological scoring 
+    plants.sort("score")
+    console.log("🚀 ~ file: plants.js ~ line 97 ~ router.get ~ plants", plants.slice(0,10))
+
+    //TODO: comment envoyer par page de 20 max
+    
     res.json(plants);
 });
 
