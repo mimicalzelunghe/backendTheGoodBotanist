@@ -60,7 +60,6 @@ input - route 4
 router.get('/uploadPlants', async function (req, res, next) {
     console.log("Coucou")
     var plants = await PlantModel.find();
-    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants[0, 3])
     
     res.json(plants);
 });
