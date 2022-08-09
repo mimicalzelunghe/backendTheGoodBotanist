@@ -1,6 +1,6 @@
 var mongoose = require('mongoose')
 
-var plantsSchema = mongoose.Schema({
+var plantSchema = mongoose.Schema({
     /* ID */
     scientific_name: String,
     common_name: String,
@@ -20,6 +20,6 @@ var plantsSchema = mongoose.Schema({
     water_demand: Number,
 })
 
-var plantsModel = mongoose.model('plants', plantsSchema);
+var PlantModel = mongoose.model('plants', plantSchema);
 
-module.exports = plantsModel;
+module.exports = PlantModel;

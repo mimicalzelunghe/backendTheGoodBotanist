@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var PlantModel = require('../models/plants')
-var PlotsModel = require('../models/plots')
+var PlotModel = require('../models/plots')
 
 var GardenModel = require('../models/gardens')
 var ClimateModel = require('../models/climates')
@@ -56,9 +56,9 @@ Uploads all the plants objet from a plant id
 input - route 4
 ================================================= */
 router.get('/uploadPlants', async function (req, res, next) {
-    console.log("Coucou")
+    
     var plants = await PlantModel.find();
-    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants.slice(0, 3))
+    console.log("🚀 ~ file: plants.js ~ line 38 ~ router.get ~ plants", plants.slice(0, 2))
 
     res.json(plants);
 });
@@ -79,7 +79,7 @@ router.get('/uploadSuggestedPlants', async function(req, res, next) {
     var gardenId = req.body.gardenId
 
     //load the plot features
-    var plot = await PlotsModel.findById(req.body.plotId)
+    var plot = await PlotModel.findById(req.body.plotId)
 
     //load the garden features
     var garden = await GardenModel.findOne(req.body.gardenId)    
@@ -138,22 +138,49 @@ router.get('/recognizePlant', function(req, res, next) {
     Creates a new garden for the user
 ================================================= */
 router.post('/addPlant', async function(req, res, next) {
-    console.log("plotId Hello", req.body.plotId);
+    
+    console.log("🚀 ~ file: plants.js ~ line 142 ~ router.post ~ req.body", req.body)
 
+    // upload the plot data
+    const plotData = await PlotModel.findOne( { plotId: req.body.plotId } );
+    console.log("🚀 ~ file: plants.js ~ line 146 ~ router.post ~ plotData", plotData)
 
-    // à ajouter dés que le plotId sera disponible depuis le store
-    const plotData = await PlotsModel.findOne( { plotId: req.body.plotId } );
+    // add the new plant to those who existing into the plot
+    // à laquelle on ajoute cette nouvelle plante
+    var plotUpdatedPlants = [...plotData.groundedPlants, req.body.plantId]
+    console.log("🚀 ~ file: plants.js ~ line 152 ~ router.post ~ plotUpdatedPlants", plotUpdatedPlants)
 
-
-    // recup liste des id de plantes déjà existante
-        // à laquelle on ajoute à cette liste le nouveau jardin
-        var plotUpdatedPlants = [...plot.groundedPlants, req.body.plantId]
-
-    // sauvegarder la nouvelle plante dans le parcelle
-    var updatedUser = await UserModel.updateOne(
+    // sauvegarder la nouvelle plante dans la parcelle
+    var updatedPlot = await PlotModel.updateOne(
         {token:req.body.plot},
-        {groundedPlants: userUpdatedGardens }
+        {groundedPlants: plotUpdatedPlants }
     )
+    
+    var plot = await PlotModel.findOne( { plotId: updatedPlot._id }).populate('groundedPlants')
+    console.log("🚀 ~ file: plants.js ~ line 160 ~ router.post ~ plot", plot)
+
+    //upload the climate
+    const climateData = await ClimateModel.findOne( { climate_id: req.body.climateId } );
+    console.log("🚀 ~ file: plants.js ~ line 155 ~ router.post ~ climateData", climateData)
+
+    //Perfom the ecological scoring of the plot
+    var scores = eS.plotEcologicalScoring(plot, climateData)
+
+    console.log("🚀 ~ file: plants.js ~ line 156 ~ router.post ~ scores", scores)
+    
+
+
+    res.json(true);
+
+
+});
+
+/* =================================================
+    Creates a new garden for the user
+================================================= */
+router.post('/uploadPicture', async function(req, res, next) {
+    console.log("upload Picture, req.body", req.body);
+
 
     res.json(true);
 
@@ -169,7 +196,7 @@ router.post('/deletePlant',async function(req, res, next) {
 
 
     // à ajouter dés que le plotId sera disponible depuis le store
-    const plotData = await plotsModel.findOne( { plotId: req.body.plotId } );
+    const plotData = await PlotModel.findOne( { plotId: req.body.plotId } );
     const plantPlot = plotData.groundedPlants;
 
 

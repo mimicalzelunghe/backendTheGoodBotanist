@@ -1,6 +1,86 @@
-function plantEcoogicalScoring(plant, plot, climate){
+function plantEcologicalScoring(plant, plot, climate){
 
-    var plantScores = [{
+    console.log("🚀 ~ file: ecologicalScoring.js ~ line 2 ~ plantEcologicalScoring ~ plant", plant)
+
+    var biodiversityAttractiveness =0
+    var sunshine = 0
+    var soilAdequation = 0
+    var resistanceToDrought = 0
+    var coldHardiness = 0
+    var climateAdequation = 0
+    
+    if(plant.attracts_birds.toLowerCase() == "oui"){
+        biodiversityAttractiveness +=10
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 7 ~ ecoogicalScoring ~ biodiversityAttractiveness", biodiversityAttractiveness)
+        
+    }
+    if(plant.attracts_butterflies.toLowerCase() == "oui"){
+        biodiversityAttractiveness +=10
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 12 ~ ecoogicalScoring ~ biodiversityAttractiveness", biodiversityAttractiveness)
+        
+    }
+    if(plant.pollinators.toLowerCase() == "oui"){
+        biodiversityAttractiveness +=10
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 17 ~ ecoogicalScoring ~ biodiversityAttractiveness", biodiversityAttractiveness)
+        
+    }
+
+    // if the sunshine of the plot can be types tolerated by the plant then increase by 10 
+    console.log("🚀 ~ file: ecologicalScoring.js ~ line 34 ~ plantEcologicalScoring ~ plot.sunshine", plot.sunshine)
+    console.log("🚀 ~ file: ecologicalScoring.js ~ line 35 ~ plantEcologicalScoring ~ plant.sunshine.toLowerCase()", plant.sunshine.toLowerCase())
+
+    var regExPlotClimate = new RegExp(plot.sunshine, 'gmi')
+    //var regexSunshine = /soleil/gmi
+    if (plant.sunshine.match(regExPlotClimate)){
+        sunshine +=10
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 24 ~ ecoogicalScoring ~ score", sunshine)
+        
+    }
+
+    // if the plot soil is adequate for the plant then increase by 20 
+    var regExPlotSoil = new RegExp(plot.soil, 'gmi')
+    console.log('Mimic: soleil, mi-ombre'.match(regExPlotSoil))
+
+    if(plant.soil_nature.match(regExPlotSoil)){
+        soilAdequation +=20
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 31 ~ ecoogicalScoring ~ score", soilAdequation)
+        
+    }
+
+    //if the nb of months of plant drought tolerance is less than the climate expected nb of months drought
+    // increase by 10
+    if (plant.resistance_to_drought <= climate.months_drought){
+        resistanceToDrought +=10
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 39 ~ ecoogicalScoring ~ scrore", resistanceToDrought)
+        
+    }
+
+    // if the plant coudl support a the worst negative temperature of the climant, then
+    // increase by 10
+    if (plant.cold_hardiness <= climate.min_temp){
+        coldHardiness +=10
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 47 ~ ecoogicalScoring ~ scrore", coldHardiness)
+        
+    }
+
+    // if the plant i native from the climate zone, increase by 20
+    if (plant.climate.toLowerCase() == climate.climate_type.toLowerCase()){
+        climateAdequation =10
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 54 ~ ecoogicalScoring ~ scrore", climateAdequation)
+        
+        
+    }
+
+
+    return biodiversityAttractiveness, sunshine, soilAdequation, resistanceToDrought, coldHardiness, climateAdequation
+}
+
+function plotEcologicalScoring(plot, climate){
+
+console.log("🚀 ~ file: ecologicalScoring.js ~ line 73 ~ plotEcologicalScoring ~ climate", climate)
+console.log("🚀 ~ file: ecologicalScoring.js ~ line 74 ~ plotEcologicalScoring ~ plot", plot)
+
+    var plotScores = [{
         biodiversityAttractiveness:0,
         sunshine: 0,
         soilAdequation: 0,
@@ -9,61 +89,51 @@ function plantEcoogicalScoring(plant, plot, climate){
         climateAdequation: 0
         }];
 
-    if(plant.attracts_birds == "oui"){
-        plantScores.biodiversityAttractiveness +=10
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 7 ~ ecoogicalScoring ~ scrore", scrore)
-        
-    }
-    if(plant.attracts_butterflies == "oui"){
-        plantScores.biodiversityAttractiveness +=10
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 12 ~ ecoogicalScoring ~ scrore", scrore)
-        
-    }
-    if(plant.pollinators == "oui"){
-        plantScores.biodiversityAttractiveness +=10
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 17 ~ ecoogicalScoring ~ scrore", scrore)
-        
-    }
+    var nbPlants = plot.groundedPlants.length
 
-    // if the sunshine of the plot can be types tolerated by the plant then increase by 10 
-    if(plant.sunshine.find(type => type == plot.sunshine)){
-        plantScores.sunshine +=10
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 24 ~ ecoogicalScoring ~ score", score)
-        
-    }
+    // for each plant calculate the ecological scoring
 
-    // if the plot soil is adequate for the plant then increase by 20 
-    if(plant.soil_nature.find(soilQuality => soilQuality == plot.soil)){
-        plantScores.soilAdequation +=20
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 31 ~ ecoogicalScoring ~ score", score)
-        
-    }
+    var biodiversityAttractivenessScore = 0
+    var sunshineScore = 0
+    var soilAdequationScore = 0
+    var resistanceToDroughtScore = 0
+    var coldHardinessScore = 0
+    var climateAdequationScore = 0
 
-    //if the nb of months of plant drought tolerance is less than the climate expected nb of months drought
-    // increase by 10
-    if (plant.resistance_to_drought <= climate.months_drought){
-        plantScores.resistanceToDrought+=10
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 39 ~ ecoogicalScoring ~ scrore", scrore)
-        
-    }
 
-    // if the plant coudl support a the worst negative temperature of the climant, then
-    // increase by 10
-    if (plant.cold_hardiness <= climate.min_temp){
-        plantScores.coldHardiness+=10
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 47 ~ ecoogicalScoring ~ scrore", scrore)
-        
-    }
+    if (nbPlants !=0){
 
-    // if the plant i native from the climate zone, increase by 20
-    if (plant.climate <= climate.climate_type){
-        plantScores.climateAdequation=10
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 54 ~ ecoogicalScoring ~ scrore", scrore)
+        plot.groundedPlants.map((currentPlant)=>{
+            
+            var biodiversityAttractiveness, sunshine, soilAdequation, resistanceToDrought, coldHardiness, climateAdequation  = plantEcologicalScoring(currentPlant, plot, climate )
+
+            biodiversityAttractivenessScore += biodiversityAttractiveness
+            sunshineScore += sunshine
+            soilAdequationScore += soilAdequation
+            resistanceToDroughtScore += resistanceToDrought
+            coldHardinessScore += coldHardiness
+            climateAdequationScore += climateAdequation
+
+        })
+
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 111 ~ plot.groundedPlants.map ~ plotScores", plotScores)
         
-        
+
+        //calculate the average of each part of the scores
+        plotScores.biodiversityAttractiveness = biodiversityAttractivenessScore/nbPlants
+        plotScores.sunshine = sunshineScore/nbPlants
+        plotScores.soilAdequation = soilAdequationScore/nbPlants
+        plotScores.resistanceToDrought = resistanceToDroughtScore/nbPlants
+        plotScores.coldHardiness = coldHardinessScore/nbPlants
+        plotScores.climateAdequation = climateAdequationScore/nbPlants
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 108 ~ plotEcologicalScoring ~ plotScores", plotScores)
     }
 
     console.log("🚀 ~ file: ecologicalScoring.js ~ line 40 ~ ecoogicalScoring ~ scrore", scrore)
 
-    return plantScores
+    return plotScores
 }
+
+module.exports = {plantEcologicalScoring, plotEcologicalScoring};
+
+

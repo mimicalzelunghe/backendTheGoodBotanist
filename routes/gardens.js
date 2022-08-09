@@ -24,26 +24,23 @@ router.post('/uploadUserGardens', async function(req, res, next) {
 
     //find the user's garden. Gardens id are stored into 
     // the user's collection as an array
-    var user = await UserModel.findOne( { token: req.body.token  } ).populate('gardensId');
-    console.log("🚀 ~ file: gardens.js ~ line 28 ~ router.post ~ user", user)
-
-    // get all the gardens
-    var userGardens = user.gardensId
-    console.log("🚀 ~ file: gardens.js ~ line 33 ~ router.post ~ userGardens", userGardens)
+    var userGardens = await UserModel.findOne( { token: req.body.token  } ).populate('gardensId');
+    console.log("🚀 ~ file: gardens.js ~ line 28 ~ router.post ~ user", userGardens)
 
     // if idGarden is not empty, we should put it on the top of the list
     var first = req.body.idGarden;
     console.log("🚀 ~ file: gardens.js ~ line 35 ~ router.post ~ first", first)
     
-    if (first != ""){
+    /*if (first != ""){
         // retrouver l'idGarden
         userGardens.sort(function(x,y){return x._id ==first? -1 : y == first ? 1 : 0})
 
-    }
+    }*/
     //data.sort(function(x,y){ return x == first ? -1 : y == first ? 1 : 0; });
-    console.log("🚀 ~ file: gardens.js ~ line 44 ~ router.post ~ userGardens", userGardens)    
+    ///console.log("🚀 ~ file: gardens.js ~ line 44 ~ router.post ~ userGardens", userGardens)    
 
-    
+    //TODO: Mimic récupérer les parcelles
+
     res.json(userGardens);
     
     
