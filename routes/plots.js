@@ -8,13 +8,19 @@ var router = express.Router();
 var eS = require('./ecologicalScoring.js')
 
 /* =================================================
+            ROUTE 13
 Uploads all the plots of a specific garden based on a plotId
 ================================================= */
 
-router.get('/uploadPlot', function(req, res, next) {
-    var plots = []
+router.get('/uploadPlot', async function(req, res, next) {
 
-    res.json(plots);
+    console.log("🚀 ~ file: plots.js ~ line 16 ~ router.get ~ req.body", req.body)
+
+    var plot = await PlotModel.findById(req.body.plotId );
+    console.log("🚀 ~ file: plots.js ~ line 20 ~ router.get ~ plot", plot)
+    
+
+    res.json(plot);
 });
 
 /* =================================================
