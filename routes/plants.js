@@ -99,25 +99,32 @@ router.post('/uploadSuggestedPlants', async function(req, res, next) {
 
     // calculate the ecological scoring of each plant 
     var scoredPlants = []
+    
     plants.map((plant)=>{
-        console.log("🚀 ~ file: plants.js ~ line 103 ~ router.post ~ map plant", plant)
+        //console.log("🚀 ~ file: plants.js ~ line 103 ~ router.post ~ map plant", plant)
         var plantScore = eS.plantEcologicalScoring(plant, plot, climate)
         // add the ecological scoring as a new property of plant
         //create a new object containing a new property score
-        var updatedPlant = {...plant, score:plantScore }    
+        const updatedPlant1 = {...plant._doc , score:plantScore }    
+        console.log("🚀 ~ file: plants.js ~ line 121 ~ plants.map ~ updatedPlant1", updatedPlant1)
+        //console.log("🚀 ~ file: plants.js ~ line 122 ~ plants.map ~ updatedPlant1", updatedPlant1._doc)
 
         //calculates the global score of the plant
         const initialValue = 0;
-        var globalScore = updatedPlant.score.reduce( (previousValue, currentValue) => previousValue + currentValue,
+        var globalScore = updatedPlant1.score.reduce( (previousValue, currentValue) => previousValue + currentValue,
                                                     initialValue)
-        updatedPlant = {...updatedPlant, globalScore: globalScore }       
-        scoredPlants.push(updatedPlant)                                         
+       const updatedPlant2 = {...updatedPlant1 , globalScore: globalScore } 
+       console.log("🚀 ~ file: plants.js ~ line 130 ~ plants.map ~ updatedPlant2", updatedPlant2)
+
+       scoredPlants.push(updatedPlant2)                                         
+
     
-        console.log("🚀 ~ file: plants.js ~ line 115 ~ plants.map ~ updatedPlant", updatedPlant)
-        console.log("🚀 ~ file: plants.js ~ line 107 ~ plants.map ~ plant", plant)
-        console.log("🚀 ~ file: plants.js ~ line 108 ~ plants.map ~ plantScore", plantScore)
+        //console.log("🚀 ~ file: plants.js ~ line 115 ~ plants.map ~ updatedPlant", updatedPlant)
+        //console.log("🚀 ~ file: plants.js ~ line 107 ~ plants.map ~ plant", plant)
+        //console.log("🚀 ~ file: plants.js ~ line 108 ~ plants.map ~ plantScore", plantScore)
         
     })
+    
     //sort the scoredPlant
     scoredPlants.sort((a, b)=> b.globalScore - a.globalScore)
 
