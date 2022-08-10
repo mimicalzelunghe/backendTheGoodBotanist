@@ -1,6 +1,8 @@
 function plantEcologicalScoring(plant, plot, climate){
 
-    console.log("🚀 ~ file: ecologicalScoring.js ~ line 2 ~ plantEcologicalScoring ~ plant", plant)
+    console.log("🚀 ~ file: ecologicalScoring.js ~ line 3 ~ plantEcologicalScoring ~ plot", plot)
+    console.log("🚀 ~ file: ecologicalScoring.js ~ line 4 ~ plantEcologicalScoring ~ plant", plant)
+    console.log("🚀 ~ file: ecologicalScoring.js ~ line 5 ~ plantEcologicalScoring ~ climate", climate)
 
     var biodiversityAttractiveness =0
     var sunshine = 0

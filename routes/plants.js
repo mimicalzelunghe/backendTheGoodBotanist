@@ -71,40 +71,61 @@ the plot specifications
 
 input: plotId
 ================================================= */
-router.get('/uploadSuggestedPlants', async function(req, res, next) {
+router.post('/uploadSuggestedPlants', async function(req, res, next) {
 
     console.log("🚀 ~ file: plants.js ~ line 77 ~ router.get ~ req.body", req.body)
 
     var plotId = req.body.plotId
+    console.log("🚀 ~ file: plants.js ~ line 79 ~ router.post ~ plotId", plotId)
+    
     var gardenId = req.body.gardenId
+    console.log("🚀 ~ file: plants.js ~ line 82 ~ router.post ~ gardenId", gardenId)
 
     //load the plot features
     var plot = await PlotModel.findById(req.body.plotId)
+    console.log("🚀 ~ file: plants.js ~ line 86 ~ router.post ~ plot", plot)
 
     //load the garden features
-    var garden = await GardenModel.findOne(req.body.gardenId)    
+    var garden = await GardenModel.findById(req.body.gardenId)    
+    console.log("🚀 ~ file: plants.js ~ line 91 ~ router.post ~ garden", garden)
 
-    //load the plot climate
+    //load the plot's climate feature
     var climate = await ClimateModel.findOne(garden.gardenClimate)
+    console.log("🚀 ~ file: plants.js ~ line 95 ~ router.post ~ climate", climate)
 
     //load al the DB plants 
     var plants = await PlantModel.find()
+    console.log("🚀 ~ file: plants.js ~ line 99 ~ router.post ~ plants", plants.slice(0,1))
+
     // calculate the ecological scoring of each plant 
+    var scoredPlants = []
     plants.map((plant)=>{
-        var plantScore = eS.plantEcoogicalScoring(plant, plot, climate)
+        console.log("🚀 ~ file: plants.js ~ line 103 ~ router.post ~ map plant", plant)
+        var plantScore = eS.plantEcologicalScoring(plant, plot, climate)
         // add the ecological scoring as a new property of plant
-        plant["score"] = plantScore
-        console.log("🚀 ~ file: plants.js ~ line 99 ~ plants.map ~ plantScore", plantScore)
+        //create a new object containing a new property score
+        var updatedPlant = {...plant, score:plantScore }    
+
+        //calculates the global score of the plant
+        const initialValue = 0;
+        var globalScore = updatedPlant.score.reduce( (previousValue, currentValue) => previousValue + currentValue,
+                                                    initialValue)
+        updatedPlant = {...updatedPlant, globalScore: globalScore }       
+        scoredPlants.push(updatedPlant)                                         
+    
+        console.log("🚀 ~ file: plants.js ~ line 115 ~ plants.map ~ updatedPlant", updatedPlant)
+        console.log("🚀 ~ file: plants.js ~ line 107 ~ plants.map ~ plant", plant)
+        console.log("🚀 ~ file: plants.js ~ line 108 ~ plants.map ~ plantScore", plantScore)
         
     })
+    //sort the scoredPlant
+    scoredPlants.sort((a, b)=> b.globalScore - a.globalScore)
 
-    //sort plants descending by ecological scoring 
-    plants.sort("score")
-    console.log("🚀 ~ file: plants.js ~ line 97 ~ router.get ~ plants", plants.slice(0,10))
+    console.log("🚀 ~ file: plants.js ~ line 97 ~ router.get ~ plants", scoredPlants.slice(0,5))
 
     //TODO: comment envoyer par page de 20 max
     
-    res.json(plants);
+    res.json(scoredPlants);
 });
 
 
