@@ -24,8 +24,9 @@ router.post('/uploadUserGardens', async function(req, res, next) {
 
     //find the user's garden. Gardens id are stored into 
     // the user's collection as an array
-    var userGardens = await UserModel.findOne( { token: req.body.token  } ).populate('gardensId');
-    console.log("🚀 ~ file: gardens.js ~ line 28 ~ router.post ~ user", userGardens)
+    //var userGardens = await UserModel.findOne( { token: req.body.token  } ).populate('gardensId')
+    var userGardens = await UserModel.findOne( { token: req.body.token  } ).populate({path: 'gardensId', populate:[{path: 'gardenPlots'}]})
+    console.log("🚀 ~ file: gardens.js ~ line 28 ~ router.post ~ userGardens", userGardens)
 
     // if idGarden is not empty, we should put it on the top of the list
     var first = req.body.idGarden;

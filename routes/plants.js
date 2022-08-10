@@ -142,7 +142,8 @@ router.post('/addPlant', async function(req, res, next) {
     console.log("🚀 ~ file: plants.js ~ line 142 ~ router.post ~ req.body", req.body)
 
     // upload the plot data
-    const plotData = await PlotModel.findOne( { plotId: req.body.plotId } );
+    //const plotData = await PlotModel.findOne( { plotId: req.body.plotId } );
+    const plotData = await PlotModel.findById(req.body.plotId);
     console.log("🚀 ~ file: plants.js ~ line 146 ~ router.post ~ plotData", plotData)
 
     // add the new plant to those who existing into the plot
@@ -150,13 +151,13 @@ router.post('/addPlant', async function(req, res, next) {
     var plotUpdatedPlants = [...plotData.groundedPlants, req.body.plantId]
     console.log("🚀 ~ file: plants.js ~ line 152 ~ router.post ~ plotUpdatedPlants", plotUpdatedPlants)
 
-    // sauvegarder la nouvelle plante dans la parcelle
+    // save the new plant into the plot
     var updatedPlot = await PlotModel.updateOne(
-        {token:req.body.plot},
+        {_id: req.body.plotId },
         {groundedPlants: plotUpdatedPlants }
     )
     
-    var plot = await PlotModel.findOne( { plotId: updatedPlot._id }).populate('groundedPlants')
+    //var plot = await PlotModel.findOne( { plotId: updatedPlot._id }).populate('groundedPlants')
     console.log("🚀 ~ file: plants.js ~ line 160 ~ router.post ~ plot", plot)
 
     //upload the climate
@@ -165,12 +166,17 @@ router.post('/addPlant', async function(req, res, next) {
 
     //Perfom the ecological scoring of the plot
     var scores = eS.plotEcologicalScoring(plot, climateData)
-
     console.log("🚀 ~ file: plants.js ~ line 156 ~ router.post ~ scores", scores)
-    
 
+    //update the plot score
+    var updatedPlotEnd = await PlotModel.updateOne(
+        //{token:req.body.plot},
+        {_id:req.body.plotId},
+        {scoring: [scores] }
+    )
+    console.log("🚀 ~ file: plants.js ~ line 176 ~ router.post ~ updatedPlotEnd", updatedPlotEnd)
 
-    res.json(true);
+    res.json(scores);
 
 
 });

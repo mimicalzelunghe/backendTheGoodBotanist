@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 
 var plotSchema = mongoose.Schema({
     /* ID */
-    id:Number,
     name: String,
     size: String,
     sunshine: String,

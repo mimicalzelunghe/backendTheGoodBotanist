@@ -72,7 +72,7 @@ function plantEcologicalScoring(plant, plot, climate){
     }
 
 
-    return biodiversityAttractiveness, sunshine, soilAdequation, resistanceToDrought, coldHardiness, climateAdequation
+    return [biodiversityAttractiveness, sunshine, soilAdequation, resistanceToDrought, coldHardiness, climateAdequation]
 }
 
 function plotEcologicalScoring(plot, climate){
@@ -80,14 +80,14 @@ function plotEcologicalScoring(plot, climate){
 console.log("🚀 ~ file: ecologicalScoring.js ~ line 73 ~ plotEcologicalScoring ~ climate", climate)
 console.log("🚀 ~ file: ecologicalScoring.js ~ line 74 ~ plotEcologicalScoring ~ plot", plot)
 
-    var plotScores = [{
+    var plotScores = {
         biodiversityAttractiveness:0,
         sunshine: 0,
         soilAdequation: 0,
         resistanceToDrought: 0,
         coldHardiness: 0,
         climateAdequation: 0
-        }];
+        };
 
     var nbPlants = plot.groundedPlants.length
 
@@ -105,19 +105,23 @@ console.log("🚀 ~ file: ecologicalScoring.js ~ line 74 ~ plotEcologicalScoring
 
         plot.groundedPlants.map((currentPlant)=>{
             
-            var biodiversityAttractiveness, sunshine, soilAdequation, resistanceToDrought, coldHardiness, climateAdequation  = plantEcologicalScoring(currentPlant, plot, climate )
+            var result  = plantEcologicalScoring(currentPlant, plot, climate )
 
-            biodiversityAttractivenessScore += biodiversityAttractiveness
-            sunshineScore += sunshine
-            soilAdequationScore += soilAdequation
-            resistanceToDroughtScore += resistanceToDrought
-            coldHardinessScore += coldHardiness
-            climateAdequationScore += climateAdequation
+            biodiversityAttractivenessScore += result[0]
+            sunshineScore += result[1]
+            soilAdequationScore += result[2]
+            resistanceToDroughtScore += result[3]
+            coldHardinessScore += result[4]
+            climateAdequationScore += result[5]
 
         })
-
-        console.log("🚀 ~ file: ecologicalScoring.js ~ line 111 ~ plot.groundedPlants.map ~ plotScores", plotScores)
         
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 111 ~ plot.groundedPlants.map ~ biodiversityAttractivenessScore", biodiversityAttractivenessScore)
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 113 ~ plot.groundedPlants.map ~ sunshineScore", sunshineScore)
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 115 ~ plot.groundedPlants.map ~ soilAdequationScore", soilAdequationScore)
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 117 ~ plot.groundedPlants.map ~ resistanceToDroughtScore", resistanceToDroughtScore)
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 119 ~ plot.groundedPlants.map ~ coldHardinessScore", coldHardinessScore)
+        console.log("🚀 ~ file: ecologicalScoring.js ~ line 121 ~ plot.groundedPlants.map ~ climateAdequationScore", climateAdequationScore)
 
         //calculate the average of each part of the scores
         plotScores.biodiversityAttractiveness = biodiversityAttractivenessScore/nbPlants
@@ -126,10 +130,10 @@ console.log("🚀 ~ file: ecologicalScoring.js ~ line 74 ~ plotEcologicalScoring
         plotScores.resistanceToDrought = resistanceToDroughtScore/nbPlants
         plotScores.coldHardiness = coldHardinessScore/nbPlants
         plotScores.climateAdequation = climateAdequationScore/nbPlants
+
         console.log("🚀 ~ file: ecologicalScoring.js ~ line 108 ~ plotEcologicalScoring ~ plotScores", plotScores)
     }
 
-    console.log("🚀 ~ file: ecologicalScoring.js ~ line 40 ~ ecoogicalScoring ~ scrore", scrore)
 
     return plotScores
 }
