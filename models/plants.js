@@ -18,6 +18,7 @@ var plantSchema = mongoose.Schema({
     climate: String,
     description: String,
     water_demand: Number,
+    url_image: String
 })
 
 var PlantModel = mongoose.model('plants', plantSchema);
