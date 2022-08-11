@@ -231,6 +231,9 @@ router.post('/addPlant', async function(req, res, next) {
         {groundedPlants: plotUpdatedPlants }
     )
     
+    var plotWithTheNewPlant = await PlotModel.findById(req.body.plotId).populate('groundedPlants');
+    console.log("🚀 ~ file: plants.js ~ line 235 ~ router.post ~ plotModifie", plotWithTheNewPlant)
+
     //var plot = await PlotModel.findOne( { plotId: updatedPlot._id }).populate('groundedPlants')
     // console.log("🚀 ~ file: plants.js ~ line 160 ~ router.post ~ plot", plot)
 
@@ -239,7 +242,7 @@ router.post('/addPlant', async function(req, res, next) {
     console.log("🚀 ~ file: plants.js ~ line 155 ~ router.post ~ climateData", climateData)
 
     //Perfom the ecological scoring of the plot
-    var scores = eS.plotEcologicalScoring(plot, climateData)
+    var scores = eS.plotEcologicalScoring(plotWithTheNewPlant, climateData)
     console.log("🚀 ~ file: plants.js ~ line 156 ~ router.post ~ scores", scores)
 
     //update the plot score
@@ -297,6 +300,9 @@ router.post('/deletePlant',async function(req, res, next) {
         {groundedPlants: plotGoundedPlants }
     )
     
+    var plotWithoutThePlant = await PlotModel.findById(req.body.plotId).populate('groundedPlants');
+    console.log("🚀 ~ file: plants.js ~ line 235 ~ router.post ~ plotModifie", plotWithoutThePlant)
+
     //var plot = await PlotModel.findOne( { plotId: updatedPlot._id }).populate('groundedPlants')
     //console.log("🚀 ~ file: plants.js ~ line 160 ~ router.post ~ plot", plot)
 
@@ -305,7 +311,7 @@ router.post('/deletePlant',async function(req, res, next) {
     console.log("🚀 ~ file: plants.js ~ line 155 ~ router.post ~ climateData", climateData)
 
     //Perfom the ecological scoring of the plot
-    var scores = eS.plotEcologicalScoring(plot, climateData)
+    var scores = eS.plotEcologicalScoring(plotWithoutThePlant, climateData)
     console.log("🚀 ~ file: plants.js ~ line 156 ~ router.post ~ scores", scores)
 
     //update the plot score
