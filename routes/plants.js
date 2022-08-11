@@ -171,12 +171,12 @@ router.post('/addPlant', async function(req, res, next) {
 
     // upload the plot data
     //const plotData = await PlotModel.findOne( { plotId: req.body.plotId } );
-    const plotData = await PlotModel.findById(req.body.plotId);
-    console.log("🚀 ~ file: plants.js ~ line 146 ~ router.post ~ plotData", plotData)
+    const plot = await PlotModel.findById(req.body.plotId);
+    console.log("🚀 ~ file: plants.js ~ line 146 ~ router.post ~ plotData", plot)
 
     // add the new plant to those who existing into the plot
     // à laquelle on ajoute cette nouvelle plante
-    var plotUpdatedPlants = [...plotData.groundedPlants, req.body.plantId]
+    var plotUpdatedPlants = [...plot.groundedPlants, req.body.plantId]
     console.log("🚀 ~ file: plants.js ~ line 152 ~ router.post ~ plotUpdatedPlants", plotUpdatedPlants)
 
     // save the new plant into the plot
@@ -186,7 +186,7 @@ router.post('/addPlant', async function(req, res, next) {
     )
     
     //var plot = await PlotModel.findOne( { plotId: updatedPlot._id }).populate('groundedPlants')
-    console.log("🚀 ~ file: plants.js ~ line 160 ~ router.post ~ plot", plot)
+    // console.log("🚀 ~ file: plants.js ~ line 160 ~ router.post ~ plot", plot)
 
     //upload the climate
     const climateData = await ClimateModel.findOne( { climate_id: req.body.climateId } );
