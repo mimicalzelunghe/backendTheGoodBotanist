@@ -161,6 +161,7 @@ router.post('/uploadPlotPlants', async function(req, res, next) {
 
     // calculate the ecological scoring of each plant 
     var scoredPlants = []
+ 
     //calculate the plants and the plot scores
     plot.groundedPlants.map((plant)=>{
         //console.log("🚀 ~ file: plants.js ~ line 103 ~ router.post ~ map plant", plant)
@@ -189,8 +190,13 @@ router.post('/uploadPlotPlants', async function(req, res, next) {
 
     // calculate the plot ecoological scoring
     plotScores = eS.plotEcologicalScoring(plot, climate)
+    console.log("🚀 ~ file: plants.js ~ line 192 ~ router.post ~ plotScores", plotScores)
+    console.log("🚀 ~ file: plants.js ~ line 195 ~ router.post ~ scoredPlants", scoredPlants)
+    var resultat =[scoredPlants, plotScores]
+    // resultat.push(scoredPlants)
+    // resultat.push(plotScores)
 
-    res.json(scoredPlants, plotScores);
+    res.json(resultat);
 });
 
 /* =================================================

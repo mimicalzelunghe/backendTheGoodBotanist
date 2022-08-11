@@ -12,7 +12,7 @@ var eS = require('./ecologicalScoring.js')
 Uploads all the plots of a specific garden based on a plotId
 ================================================= */
 
-router.get('/uploadPlot', async function(req, res, next) {
+router.post('/uploadPlot', async function(req, res, next) {
 
     console.log("🚀 ~ file: plots.js ~ line 16 ~ router.get ~ req.body", req.body)
 
@@ -65,7 +65,7 @@ router.post('/createPlot', async function(req, res, next) {
         {gardenPlots: gardenPlots }
 
     )
-    console.log("🚀 ~ file: plots.js ~ line 65 ~ router.post ~ gardenUpdated", gardenUpdated)
+    //console.log("🚀 ~ file: plots.js ~ line 65 ~ router.post ~ gardenUpdated", gardenUpdated)
 
     res.json(plotSaved);
 
